@@ -3,8 +3,9 @@ package redis;
 import com.lambdaworks.redis.RedisClient;
 import com.lambdaworks.redis.api.StatefulRedisConnection;
 import com.lambdaworks.redis.api.sync.RedisCommands;
+import twitter.TwitterEventHandler;
 
-public class RedisRepository {
+public class RedisRepository implements TwitterEventHandler {
 
     private RedisClient redisClient;
     private StatefulRedisConnection<String, String> connection;
@@ -20,10 +21,6 @@ public class RedisRepository {
         System.out.println("Connected to Redis");
     }
 
-    public void addData(String key, String data){
-        syncCommands.set(key, data);
-    }
-
     public void close(){
         connection.close();
         redisClient.shutdown();
@@ -37,6 +34,10 @@ public class RedisRepository {
             close();
             super.finalize();
         }
+    }
+
+    public void handleEvent(String keyword, String twitterMsg) {
+        syncCommands.set(keyword + "_" + java.util.UUID.randomUUID().toString(), twitterMsg);
     }
 }
 

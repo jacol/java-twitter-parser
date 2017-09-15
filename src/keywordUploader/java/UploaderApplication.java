@@ -1,3 +1,4 @@
+import rabbit.RabbitConnectionFactory;
 import rabbit.RabbitPoster;
 
 import java.io.IOException;
@@ -8,7 +9,8 @@ public class UploaderApplication {
 
         System.out.println("Starting uploading");
 
-        RabbitPoster rabbitPoster = new RabbitPoster();
+        RabbitConnectionFactory rabbitConnectionFactory = new RabbitConnectionFactory();
+        RabbitPoster rabbitPoster = new RabbitPoster(rabbitConnectionFactory);
 
         try{
             rabbitPoster.publishKeywords(new String []{
@@ -21,6 +23,7 @@ public class UploaderApplication {
         }
         finally{
             rabbitPoster.close();
+            rabbitConnectionFactory.close();
         }
 
         System.out.println("Done uploading");

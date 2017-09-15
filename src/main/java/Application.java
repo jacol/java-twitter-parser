@@ -1,6 +1,8 @@
-import rabbit.RabbitPoster;
+import rabbit.RabbitConnectionFactory;
+import rabbit.RabbitListener;
 import redis.RedisRepository;
 import twitter.TwitterHarvester;
+import twitter.TwitterListener;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -9,12 +11,12 @@ public class Application {
     public static void main(String [] args) throws IOException, TimeoutException {
 
         RedisRepository redisRepository = new RedisRepository();
-        RabbitPoster rabbitPoster = new RabbitPoster();
+        RabbitConnectionFactory rabbitConnectionFactory = new RabbitConnectionFactory();
+        RabbitListener rabbitListener = new RabbitListener(rabbitConnectionFactory);
+        TwitterListener twitterListener = new TwitterListener();
 
         try {
-            new TwitterHarvester(redisRepository, rabbitPoster).run();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            new TwitterHarvester(redisRepository, rabbitListener, twitterListener).run();
         } catch (TimeoutException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -22,7 +24,8 @@ public class Application {
         }
         finally {
             redisRepository.close();
-            rabbitPoster.close();
+            rabbitListener.close();
+            rabbitConnectionFactory.close();
         }
     }
 }

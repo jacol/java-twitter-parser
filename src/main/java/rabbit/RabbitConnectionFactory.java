@@ -9,6 +9,8 @@ import java.util.concurrent.TimeoutException;
 
 public class RabbitConnectionFactory {
 
+    public final static String KEYWORDS_QUEUE_NAME = "keywords";
+
     private Channel channel;
     private Connection connection;
     private boolean disposed;
