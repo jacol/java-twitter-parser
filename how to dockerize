@@ -1,0 +1,22 @@
+$ mvn clean
+$ mvn install
+$ docker build -f Dockerfile -t springdemo .
+$ docker run -p 8080:8080 -t springdemo
+
+https://stackoverflow.com/questions/27767264/how-to-dockerize-maven-project-and-how-many-ways-to-accomplish-it
+
+
+
+
+
+additional
+#redis
+sudo docker run --name some-redis -p 6379:6379 -d redis redis-server --appendonly yes
+
+#redis ui
+sudo docker run -d --link some-redis:redis -p 8081:8081 tenstartups/redis-commander --redis-host redis
+http://localhost:8081/
+
+#rabbitmq
+sudo docker run -d --hostname my-rabbit --name some-rabbit -p 8080:15672 -p 5672:5672 rabbitmq:3-management
+http://localhost:8080/#/

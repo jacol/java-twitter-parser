@@ -1,0 +1,4 @@
+mongo\MongoRepository.class
+rabbit\RabbitReader.class
+Application.class
+twitter\TwitterHarvester.class
