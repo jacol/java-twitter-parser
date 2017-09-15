@@ -20,6 +20,10 @@ public class UploaderApplication {
                     "java",
                     "docker"
             });
+
+            while (System.in.available() == 0) {
+                // Do whatever you want
+            }
         }
         finally{
             rabbitPoster.close();

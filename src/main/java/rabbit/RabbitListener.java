@@ -26,6 +26,8 @@ public class RabbitListener {
                     throws IOException {
                 String message = new String(body, "UTF-8");
 
+                System.out.println(" [x] Received '" + message + "'");
+
                 if(rabbitEventHandler != null){
                     try {
                         rabbitEventHandler.handleEvent(message);
@@ -33,8 +35,6 @@ public class RabbitListener {
                         e.printStackTrace();
                     }
                 }
-
-                System.out.println(" [x] Received '" + message + "'");
             }
         };
 

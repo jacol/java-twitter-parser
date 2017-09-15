@@ -16,7 +16,13 @@ public class Application {
         TwitterListener twitterListener = new TwitterListener();
 
         try {
+
             new TwitterHarvester(redisRepository, rabbitListener, twitterListener).run();
+
+            while (System.in.available() == 0) {
+                // Do whatever you want
+            }
+
         } catch (TimeoutException e) {
             e.printStackTrace();
         } catch (IOException e) {
