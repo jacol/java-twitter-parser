@@ -17,22 +17,27 @@ public class RabbitListener {
     }
 
     public void startListening() throws IOException, TimeoutException {
-        Channel channel = rabbitConnectionFactory.CreateConnection();
+        final Channel channel = rabbitConnectionFactory.CreateConnection();
 
-        Consumer consumer = new DefaultConsumer(channel) {
+        final Consumer consumer = new DefaultConsumer(channel) {
+
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope,
                                        AMQP.BasicProperties properties, byte[] body)
                     throws IOException {
+
                 String message = new String(body, "UTF-8");
 
-                System.out.println(" [x] Received '" + message + "'");
+                System.out.println(" [r] Received '" + message + "'");
 
-                if(rabbitEventHandler != null){
+                if (rabbitEventHandler != null) {
                     try {
                         rabbitEventHandler.handleEvent(message);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                    } finally {
+                        System.out.println(" [r] Done -> " + message);
+                        channel.basicAck(envelope.getDeliveryTag(), false);
                     }
                 }
             }

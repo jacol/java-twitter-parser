@@ -60,8 +60,11 @@ public class TwitterListener implements RabbitEventHandler {
         // Attempts to establish a connection.
         hosebirdClient.connect();
 
-        // on a different thread, or multiple different threads....
-        while (!hosebirdClient.isDone()) {
+        System.out.println("   [t} Starting for: " + keyword);
+
+        long t= System.currentTimeMillis();
+        long end = t+15000;
+        while(!hosebirdClient.isDone() && System.currentTimeMillis() < end) {
             String msg = msgQueue.take();
 
             JSONObject obj = new JSONObject(msg);
@@ -72,8 +75,26 @@ public class TwitterListener implements RabbitEventHandler {
             }
 
             System.out.println("Twitter msg received: " + text);
+
+            // pause to avoid churning
+            //Thread.sleep();
         }
 
+        System.out.println("   [t} Done for: " + keyword);
+
+//        // on a different thread, or multiple different threads....
+//        while (!hosebirdClient.isDone()) {
+//            String msg = msgQueue.take();
+//
+//            JSONObject obj = new JSONObject(msg);
+//            String text = obj.getString("text");
+//
+//            if(twitterEventHandler != null){
+//                twitterEventHandler.handleEvent(keyword, text);
+//            }
+//
+//            System.out.println("Twitter msg received: " + text);
+//        }
     }
 
     public void addEventHandler(TwitterEventHandler twitterEventHandler){
