@@ -18,6 +18,7 @@ public class RabbitListener {
 
     public void startListening() throws IOException, TimeoutException {
         final Channel channel = rabbitConnectionFactory.CreateConnection();
+        channel.basicQos(1);
 
         final Consumer consumer = new DefaultConsumer(channel) {
 
@@ -43,7 +44,7 @@ public class RabbitListener {
             }
         };
 
-        channel.basicConsume(RabbitConnectionFactory.KEYWORDS_QUEUE_NAME, true, consumer);
+        channel.basicConsume(RabbitConnectionFactory.KEYWORDS_QUEUE_NAME, consumer);
     }
 
     public void addEventHandler(RabbitEventHandler rabbitEventHandler){
