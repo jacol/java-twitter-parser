@@ -26,10 +26,10 @@ public class TwitterListener implements RabbitEventHandler {
         run(message);
     }
 
-    public void run(String keyword) throws InterruptedException {
+    public void run(final String keyword) throws InterruptedException {
 
         /** Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */
-        BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
+        final BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
         BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<Event>(1000);
 
         /** Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
@@ -56,45 +56,39 @@ public class TwitterListener implements RabbitEventHandler {
                 .processor(new StringDelimitedProcessor(msgQueue))
                 .eventMessageQueue(eventQueue);                          // optional: use this if you want to process client events
 
-        Client hosebirdClient = builder.build();
+        final Client hosebirdClient = builder.build();
         // Attempts to establish a connection.
         hosebirdClient.connect();
 
         System.out.println("   [t} Starting for: " + keyword);
 
-        long t= System.currentTimeMillis();
-        long end = t+15000;
-        while(!hosebirdClient.isDone() && System.currentTimeMillis() < end) {
-            String msg = msgQueue.take();
 
-            JSONObject obj = new JSONObject(msg);
-            String text = obj.getString("text");
+        Thread one = new Thread() {
+            public void run() {
+                try {
 
-            if(twitterEventHandler != null){
-                twitterEventHandler.handleEvent(keyword, text);
+                    while(!hosebirdClient.isDone()) {
+                        String msg = msgQueue.take();
+
+                        JSONObject obj = new JSONObject(msg);
+                        String text = obj.getString("text");
+
+                        if(twitterEventHandler != null){
+                            twitterEventHandler.handleEvent(keyword, text);
+                        }
+
+                        System.out.println("Twitter msg received: " + text);
+                    }
+                } catch(InterruptedException v) {
+                    System.out.println(v);
+                }
             }
+        };
 
-            System.out.println("Twitter msg received: " + text);
-
-            // pause to avoid churning
-            //Thread.sleep();
-        }
+        one.start();
+        one.join(15 * 1000);
 
         System.out.println("   [t} Done for: " + keyword);
-
-//        // on a different thread, or multiple different threads....
-//        while (!hosebirdClient.isDone()) {
-//            String msg = msgQueue.take();
-//
-//            JSONObject obj = new JSONObject(msg);
-//            String text = obj.getString("text");
-//
-//            if(twitterEventHandler != null){
-//                twitterEventHandler.handleEvent(keyword, text);
-//            }
-//
-//            System.out.println("Twitter msg received: " + text);
-//        }
     }
 
     public void addEventHandler(TwitterEventHandler twitterEventHandler){
