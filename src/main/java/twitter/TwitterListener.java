@@ -11,6 +11,7 @@ import com.twitter.hbc.core.event.Event;
 import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
+import org.json.JSONException;
 import org.json.JSONObject;
 import rabbit.RabbitEventHandler;
 
@@ -79,14 +80,21 @@ public class TwitterListener implements RabbitEventHandler {
 
                         System.out.println("Twitter msg received: " + text);
                     }
+
+                    System.out.println("   [t] ====== WORK DONE ?! " + keyword);
+
                 } catch(InterruptedException v) {
-                    System.out.println(v);
+                    System.out.println("   [t] Finishing thread for: " + keyword);
+                }
+                catch(JSONException jsonException){
+                    System.out.println("Error parsing json! " + jsonException);
                 }
             }
         };
 
         one.start();
         one.join(15 * 1000);
+        one.interrupt();
 
         System.out.println("   [t} Done for: " + keyword);
     }
