@@ -12,7 +12,6 @@ import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 import org.json.JSONException;
-import org.json.JSONObject;
 import rabbit.RabbitEventHandler;
 
 import java.util.List;
@@ -22,6 +21,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class TwitterListener implements RabbitEventHandler {
 
     private TwitterEventHandler twitterEventHandler;
+    private TwitterParser twitterParser;
+
+    public TwitterListener(TwitterParser twitterParser){
+
+        this.twitterParser = twitterParser;
+    }
 
     public void handleEvent(String message) throws InterruptedException {
         run(message);
@@ -71,14 +76,13 @@ public class TwitterListener implements RabbitEventHandler {
                     while(!hosebirdClient.isDone()) {
                         String msg = msgQueue.take();
 
-                        JSONObject obj = new JSONObject(msg);
-                        String text = obj.getString("text");
+                        String parsed = twitterParser.Parse(msg);
 
                         if(twitterEventHandler != null){
                             twitterEventHandler.handleEvent(keyword, msg);
                         }
 
-                        System.out.println("Twitter msg received: " + text);
+                        System.out.println("Twitter msg received: " + parsed);
                     }
 
                     System.out.println("   [t] ====== WORK DONE ?! " + keyword);

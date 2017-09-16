@@ -3,6 +3,7 @@ import rabbit.RabbitListener;
 import redis.RedisRepository;
 import twitter.TwitterHarvester;
 import twitter.TwitterListener;
+import twitter.TwitterParser;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -13,7 +14,7 @@ public class Application {
         RedisRepository redisRepository = new RedisRepository();
         RabbitConnectionFactory rabbitConnectionFactory = new RabbitConnectionFactory();
         RabbitListener rabbitListener = new RabbitListener(rabbitConnectionFactory);
-        TwitterListener twitterListener = new TwitterListener();
+        TwitterListener twitterListener = new TwitterListener(new TwitterParser());
 
         try {
 
