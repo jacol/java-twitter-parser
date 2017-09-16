@@ -54,8 +54,8 @@ public class TwitterListener implements RabbitEventHandler {
                 .hosts(hosebirdHosts)
                 .authentication(hosebirdAuth)
                 .endpoint(hosebirdEndpoint)
-                .processor(new StringDelimitedProcessor(msgQueue))
-                .eventMessageQueue(eventQueue);                          // optional: use this if you want to process client events
+                .processor(new StringDelimitedProcessor(msgQueue));
+                //.eventMessageQueue(eventQueue);                          // optional: use this if you want to process client events
 
         final Client hosebirdClient = builder.build();
         // Attempts to establish a connection.
@@ -75,7 +75,7 @@ public class TwitterListener implements RabbitEventHandler {
                         String text = obj.getString("text");
 
                         if(twitterEventHandler != null){
-                            twitterEventHandler.handleEvent(keyword, text);
+                            twitterEventHandler.handleEvent(keyword, msg);
                         }
 
                         System.out.println("Twitter msg received: " + text);
@@ -97,6 +97,8 @@ public class TwitterListener implements RabbitEventHandler {
         one.interrupt();
 
         System.out.println("   [t} Done for: " + keyword);
+
+        hosebirdClient.stop();
     }
 
     public void addEventHandler(TwitterEventHandler twitterEventHandler){

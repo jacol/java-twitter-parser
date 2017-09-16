@@ -18,7 +18,22 @@ public class UploaderApplication {
                     "trump",
                     "nikitiuk",
                     "java",
-                    "docker"
+                    "docker",
+                    "dotnet",
+                    "scala",
+                    "Credit-Suisse",
+                    "Wroclaw",
+                    "Warsaw",
+                    "London",
+                    "Raleigh",
+                    "Ola",
+                    "Jacek",
+                    "kod",
+                    "kot",
+                    "pies",
+                    "love",
+                    "hate",
+                    "xxx",
             });
 
             while (System.in.available() == 0) {

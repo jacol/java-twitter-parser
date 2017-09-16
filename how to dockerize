@@ -1,6 +1,8 @@
 $ mvn clean
 $ mvn install
-$ docker build -f Dockerfile -t springdemo .
+docker build --no-cache -f Dockerfile -t dzek3de/tworker .
+docker push ...
+or
 $ docker run -p 8080:8080 -t springdemo
 
 https://stackoverflow.com/questions/27767264/how-to-dockerize-maven-project-and-how-many-ways-to-accomplish-it
@@ -20,3 +22,6 @@ http://localhost:8081/
 #rabbitmq
 sudo docker run -d --hostname my-rabbit --name some-rabbit -p 8080:15672 -p 5672:5672 rabbitmq:3-management
 http://localhost:8080/#/
+
+
+sudo docker service create --replicas 10 --name tworkerservice dzek3de/tworker
