@@ -76,10 +76,10 @@ public class TwitterListener implements RabbitEventHandler {
                     while(!hosebirdClient.isDone()) {
                         String msg = msgQueue.take();
 
-                        String parsed = twitterParser.Parse(msg);
+                        String parsed = twitterParser.Parse(msg, keyword);
 
                         if(twitterEventHandler != null){
-                            twitterEventHandler.handleEvent(keyword, msg);
+                            twitterEventHandler.handleEvent(keyword, parsed);
                         }
 
                         System.out.println("Twitter msg received: " + parsed);

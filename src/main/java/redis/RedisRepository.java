@@ -37,7 +37,7 @@ public class RedisRepository implements TwitterEventHandler {
     }
 
     public void handleEvent(String keyword, String twitterMsg) {
-        syncCommands.set(keyword + "_" + java.util.UUID.randomUUID().toString(), twitterMsg);
+        syncCommands.lpush(keyword, twitterMsg);
     }
 }
 
