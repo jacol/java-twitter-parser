@@ -12,38 +12,41 @@ public class UploaderApplication {
         RabbitConnectionFactory rabbitConnectionFactory = new RabbitConnectionFactory();
         RabbitPoster rabbitPoster = new RabbitPoster(rabbitConnectionFactory);
 
-        try{
-            rabbitPoster.publishKeywords(new String []{
-                    "putin",
-                    "trump",
-                    "nikitiuk",
-                    "java",
-                    "docker",
-                    "dotnet",
-                    "scala",
-                    "Credit-Suisse",
-                    "Wroclaw",
-                    "Warsaw",
-                    "London",
-                    "Raleigh",
-                    "Ola",
-                    "Jacek",
-                    "kod",
-                    "kot",
-                    "pies",
-                    "love",
-                    "hate",
-                    "xxx",
-            });
+            try {
 
-            while (System.in.available() == 0) {
-                // Do whatever you want
+                for(int i=0;i<100;i++) {
+                    rabbitPoster.publishKeywords(new String[]{
+                            "putin",
+                            "trump",
+                            "nikitiuk",
+                            "java",
+                            "docker",
+                            "dotnet",
+                            "scala",
+                            "Credit-Suisse",
+                            "Wroclaw",
+                            "Warsaw",
+                            "London",
+                            "Raleigh",
+                            "Ola",
+                            "Jacek",
+                            "kod",
+                            "kot",
+                            "pies",
+                            "love",
+                            "hate",
+                            "xxx",
+                    });
+                }
+
+                while (System.in.available() == 0) {
+                    // Do whatever you want
+                }
+            } finally {
+                rabbitPoster.close();
+                rabbitConnectionFactory.close();
             }
-        }
-        finally{
-            rabbitPoster.close();
-            rabbitConnectionFactory.close();
-        }
+
 
         System.out.println("Done uploading");
     }
