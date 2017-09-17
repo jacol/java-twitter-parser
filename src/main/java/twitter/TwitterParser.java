@@ -28,6 +28,8 @@ public class TwitterParser {
 
         result.put("text", jsonObject.getString("text"));
         result.put("twitter_id", jsonObject.getString("id_str"));
+        result.put("created_at", jsonObject.getString("created_at"));
+        result.put("lang", jsonObject.getString("lang"));
 
         JSONObject user = jsonObject.getJSONObject("user");
 

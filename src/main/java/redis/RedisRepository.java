@@ -3,6 +3,7 @@ package redis;
 import com.lambdaworks.redis.RedisClient;
 import com.lambdaworks.redis.api.StatefulRedisConnection;
 import com.lambdaworks.redis.api.sync.RedisCommands;
+import configuration.ConfigurationManager;
 import twitter.TwitterEventHandler;
 
 public class RedisRepository implements TwitterEventHandler {
@@ -12,9 +13,15 @@ public class RedisRepository implements TwitterEventHandler {
     private RedisCommands<String, String> syncCommands;
 
     private boolean disposed = false;
+    private ConfigurationManager configurationManager;
+
+    public RedisRepository(ConfigurationManager configurationManager) {
+
+        this.configurationManager = configurationManager;
+    }
 
     public void connect(){
-        redisClient = RedisClient.create("redis://192.168.0.106:6379/0");
+        redisClient = RedisClient.create(configurationManager.GetProperty("redis_addr"));
         connection = redisClient.connect();
         syncCommands = connection.sync();
 

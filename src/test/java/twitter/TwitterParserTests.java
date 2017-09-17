@@ -30,6 +30,8 @@ public class TwitterParserTests {
         assertNotNull(result.get("twitter_nick"));
         assertNotNull(result.get("followers"));
         assertNotNull(result.get("keyword"));
+        assertNotNull(result.get("created_at"));
+        assertNotNull(result.get("lang"));
 
         assertEquals("_Bshadanti", result.get("twitter_nick"));
     }
@@ -44,6 +46,8 @@ public class TwitterParserTests {
         assertNotNull(result.get("twitter_nick"));
         assertNotNull(result.get("followers"));
         assertNotNull(result.get("keyword"));
+        assertNotNull(result.get("created_at"));
+        assertNotNull(result.get("lang"));
 
         assertEquals("Berlustinho", result.get("twitter_nick"));
     }
@@ -58,6 +62,8 @@ public class TwitterParserTests {
         assertNotNull(result.get("twitter_nick"));
         assertNotNull(result.get("followers"));
         assertNotNull(result.get("keyword"));
+        assertNotNull(result.get("created_at"));
+        assertNotNull(result.get("lang"));
 
         assertEquals("HerminioAndujar", result.get("twitter_nick"));
     }

@@ -11,6 +11,7 @@ import com.twitter.hbc.core.event.Event;
 import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
+import configuration.ConfigurationManager;
 import org.json.JSONException;
 import rabbit.RabbitEventHandler;
 
@@ -22,10 +23,12 @@ public class TwitterListener implements RabbitEventHandler {
 
     private TwitterEventHandler twitterEventHandler;
     private TwitterParser twitterParser;
+    private ConfigurationManager configurationManager;
 
-    public TwitterListener(TwitterParser twitterParser){
+    public TwitterListener(TwitterParser twitterParser, ConfigurationManager configurationManager){
 
         this.twitterParser = twitterParser;
+        this.configurationManager = configurationManager;
     }
 
     public void handleEvent(String message) throws InterruptedException {
@@ -51,8 +54,11 @@ public class TwitterListener implements RabbitEventHandler {
         hosebirdEndpoint.trackTerms(terms);
 
         // These secrets should be read from a config file
-        Authentication hosebirdAuth = new OAuth1("zouRZe8Adl0bGYp8eoQvSfwjy", "GysVTr0g8A7NXbnAzKKeWa84tl5yDQHuI1aGxkoFWw7D7VhvP7"
-                , "891399162834636800-592KFUlgFWbs6xhcz7rxhV7yGlz3DCz", "109zy35I6uccayVcCwFvbHjirzDyDfdK9HnDXbsmtACkS");
+        Authentication hosebirdAuth = new OAuth1(
+                configurationManager.GetProperty("twitter_consumer_key"),
+                configurationManager.GetProperty("twitter_consumer_secret"),
+                configurationManager.GetProperty("twitter_token"),
+                configurationManager.GetProperty("twitter_token_secret"));
 
         ClientBuilder builder = new ClientBuilder()
                 .name("Hosebird-Client-01")                              // optional: mainly for the logs
@@ -72,7 +78,6 @@ public class TwitterListener implements RabbitEventHandler {
         Thread one = new Thread() {
             public void run() {
                 try {
-
                     while(!hosebirdClient.isDone()) {
                         String msg = msgQueue.take();
 

@@ -1,3 +1,4 @@
+import configuration.ConfigurationManager;
 import rabbit.RabbitConnectionFactory;
 import rabbit.RabbitListener;
 import redis.RedisRepository;
@@ -11,10 +12,12 @@ import java.util.concurrent.TimeoutException;
 public class Application {
     public static void main(String [] args) throws IOException, TimeoutException {
 
-        RedisRepository redisRepository = new RedisRepository();
-        RabbitConnectionFactory rabbitConnectionFactory = new RabbitConnectionFactory();
+        ConfigurationManager configurationManager = new ConfigurationManager();
+
+        RedisRepository redisRepository = new RedisRepository(configurationManager);
+        RabbitConnectionFactory rabbitConnectionFactory = new RabbitConnectionFactory(configurationManager);
         RabbitListener rabbitListener = new RabbitListener(rabbitConnectionFactory);
-        TwitterListener twitterListener = new TwitterListener(new TwitterParser());
+        TwitterListener twitterListener = new TwitterListener(new TwitterParser(), configurationManager);
 
         try {
 
