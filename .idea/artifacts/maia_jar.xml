@@ -25,6 +25,7 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/biz/paluch/redis/lettuce/4.4.1.Final/lettuce-4.4.1.Final.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/netty/netty-buffer/4.1.15.Final/netty-buffer-4.1.15.Final.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/twitter/joauth/6.0.2/joauth-6.0.2.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
     </root>
   </artifact>
 </component>
