@@ -1,9 +1,6 @@
 package configuration;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 
 public class ConfigurationManager {
@@ -13,13 +10,8 @@ public class ConfigurationManager {
     public void Load() {
 
         try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            File configFile = new File(classLoader.getResource("config.properties").getFile());
-
-            FileReader reader = new FileReader(configFile);
             properties = new Properties();
-            properties.load(reader);
-            reader.close();
+            properties.load(getClass().getClassLoader().getResourceAsStream("config.properties"));
         } catch (FileNotFoundException ex) {
             System.err.println(ex);
         } catch (IOException ex) {
