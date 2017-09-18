@@ -11,9 +11,11 @@ public class ConfigurationManager {
     private Properties properties;
 
     public void Load() {
-        File configFile = new File("config.properties");
 
         try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            File configFile = new File(classLoader.getResource("config.properties").getFile());
+
             FileReader reader = new FileReader(configFile);
             properties = new Properties();
             properties.load(reader);

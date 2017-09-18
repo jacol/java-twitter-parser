@@ -1,3 +1,4 @@
+import configuration.ConfigurationManager;
 import rabbit.RabbitConnectionFactory;
 import rabbit.RabbitPoster;
 
@@ -9,7 +10,7 @@ public class UploaderApplication {
 
         System.out.println("Starting uploading");
 
-        RabbitConnectionFactory rabbitConnectionFactory = new RabbitConnectionFactory();
+        RabbitConnectionFactory rabbitConnectionFactory = new RabbitConnectionFactory(new ConfigurationManager());
         RabbitPoster rabbitPoster = new RabbitPoster(rabbitConnectionFactory);
 
             try {
